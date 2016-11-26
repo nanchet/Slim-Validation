@@ -95,6 +95,15 @@ class Validation
         $request = $request->withAttribute($this->validators_name, $this->getValidators());
         $request = $request->withAttribute($this->translator_name, $this->getTranslator());
 
+        if ($this->hasErrors()) {
+            return $response
+                ->withStatus(400)
+                ->withJson(array(
+                    'status' => false,
+                    'errors' => $this->getErrors()
+                ));
+        }
+
         return $next($request, $response);
     }
 
